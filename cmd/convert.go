@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/osangenis/slack-json-cli/slack"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +23,12 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("convert called")
+		export, err := slack.NewFromPath("local/tech")
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+		export.Write(slack.OuputFormat_PlainText, os.Stdout)
 	},
 }
 

@@ -18,5 +18,14 @@ func (me *MessageExport) AddRawMessages(rawJson []byte) error {
 		return err
 	}
 	me.Messages = append(me.Messages, messages...)
+	messagesWithMissingReplies := me.Messages.WithMissingReplies()
+	for _, m := range messagesWithMissingReplies {
+		for _, r := range m.Replies {
+			if r.Message != nil {
+				continue
+			}
+			r.Message = me.Messages.FindByUserAndTs(r.User, r.Ts)
+		}
+	}
 	return nil
 }
