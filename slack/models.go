@@ -17,6 +17,7 @@ type Message struct {
 	Text            string  `json:"text"`
 	ClientMsgID     string  `json:"client_msg_id"`
 	Replies         Replies `json:"replies"`
+	IsReply         *bool
 }
 
 type Replies []*Reply
@@ -27,8 +28,10 @@ type Reply struct {
 }
 
 type UserProfile struct {
-	RealName string `json:"real_name"`
-	UserName string `json:"name"`
+	FirstName   string `json:"first_name"`
+	RealName    string `json:"real_name"`
+	Name        string `json:"name"`
+	DisplayName string `json:"display_name"`
 }
 
 func (l Messages) WithMissingReplies() Messages {
@@ -50,4 +53,19 @@ func (l Messages) FindByUserAndTs(user string, ts string) *Message {
 		}
 	}
 	return nil
+}
+
+func (m Message) UserDisplayName() string {
+	if m.UserProfile != nil {
+		if m.UserProfile.DisplayName != "" {
+			return m.UserProfile.DisplayName
+		}
+		if m.UserProfile.RealName != "" {
+			return m.UserProfile.RealName
+		}
+		if m.UserProfile.Name != "" {
+			return m.UserProfile.Name
+		}
+	}
+	return m.User
 }

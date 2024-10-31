@@ -22,7 +22,7 @@ tasks:
   test-single-file:
     cmds:
       - task: build
-      - ./bin/slack-json-cli convert local/2024-10-25.json
+      - ./bin/slack-json-cli convert local > tech_channel_chat.txt
 
 
 
