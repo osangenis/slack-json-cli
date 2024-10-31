@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+  vendor:
+    go mod vendor
+
+  test:
+    cmds:
+      - go test ./...
+  build:
+    cmds:
+      - task: test
+      - go build -o bin/slack-json-cli
+
+  cobra-init:
+    cmds:
+      - go get -u github.com/spf13/cobra@latest
+      - go install github.com/spf13/cobra-cli@latest
+      - cobra-cli init --author "Oscar Sangenis" --license MIT
+      - cobra-cli add convert
+
+  test-single-file:
+    cmds:
+      - task: build
+      - ./bin/slack-json-cli convert local > tech_channel_chat.txt
+
+
+
